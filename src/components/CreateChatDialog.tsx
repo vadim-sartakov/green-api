@@ -1,4 +1,6 @@
-import { useForm } from 'react-hook-form';
+import { IMaskMixin } from 'react-imask';
+import { Controller, useForm } from 'react-hook-form';
+import type { Ref } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,6 +13,10 @@ import {
 } from '@/components/ui/dialog';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+
+const MaskedInput = IMaskMixin<HTMLInputElement>(({ inputRef, ...props }) => (
+  <Input {...props} ref={inputRef as Ref<HTMLInputElement>} />
+));
 
 type CreateChatDialogProps = {
   open: boolean;
@@ -28,14 +34,14 @@ function CreateChatDialog({
   onCreate,
 }: CreateChatDialogProps) {
   const {
-    register,
+    control,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<CreateChatFormValues>();
 
   const createChat = ({ phoneNumber }: CreateChatFormValues) => {
-    onCreate(phoneNumber.trim());
+    onCreate(phoneNumber);
   };
 
   return (
@@ -54,16 +60,29 @@ function CreateChatDialog({
         <form id="create-chat-form" onSubmit={handleSubmit(createChat)}>
           <Field data-invalid={!!errors.phoneNumber}>
             <FieldLabel htmlFor="phoneNumber">Phone number</FieldLabel>
-            <Input
-              autoFocus
-              id="phoneNumber"
-              placeholder="+1 555 123 4567"
-              type="tel"
-              aria-invalid={!!errors.phoneNumber}
-              {...register('phoneNumber', {
+            <Controller
+              control={control}
+              name="phoneNumber"
+              rules={{
+                required: 'Phone number is required',
                 validate: (value) =>
-                  value.trim().length > 0 || 'Phone number is required',
-              })}
+                  value.replace(/\D/g, '').length === 11 ||
+                  'Enter a complete phone number',
+              }}
+              render={({ field }) => (
+                <MaskedInput
+                  autoFocus
+                  id="phoneNumber"
+                  mask="+{7} (000) 000-00-00"
+                  placeholder="+7 (___) ___-__-__"
+                  aria-invalid={!!errors.phoneNumber}
+                  name={field.name}
+                  value={field.value}
+                  onAccept={(value: string) => field.onChange(value)}
+                  onBlur={field.onBlur}
+                  inputRef={field.ref}
+                />
+              )}
             />
             <FieldError errors={[errors.phoneNumber]} />
           </Field>
