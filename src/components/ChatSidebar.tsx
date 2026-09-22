@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LogOut, MessageCircle, Plus } from 'lucide-react';
+import { LogOut, MessageCircle, Plus, Trash2 } from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ type ChatSidebarProps = {
   chats: ChatSummary[];
   activeChatId: string | null;
   onSelectChat: (chatId: string) => void;
+  onRemoveChat: (chatId: string) => void;
   onCreateChat: (phoneNumber: string) => void;
   onLogout: () => void;
 };
@@ -24,6 +25,7 @@ function ChatSidebar({
   chats,
   activeChatId,
   onSelectChat,
+  onRemoveChat,
   onCreateChat,
   onLogout,
 }: ChatSidebarProps) {
@@ -60,25 +62,38 @@ function ChatSidebar({
         ) : (
           <div className="p-2">
             {chats.map((chat) => (
-              <button
-                className={`flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors ${
+              <div
+                className={`flex w-full items-center gap-2 rounded-lg p-2 transition-colors ${
                   chat.id === activeChatId
                     ? 'bg-primary/10 text-primary'
                     : 'hover:bg-muted'
                 }`}
                 key={chat.id}
-                type="button"
-                onClick={() => onSelectChat(chat.id)}
               >
-                <Avatar>
-                  <AvatarFallback>
-                    {getInitials(chat.phoneNumber)}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="min-w-0 truncate text-sm font-medium">
-                  {chat.phoneNumber}
-                </span>
-              </button>
+                <button
+                  className="flex min-w-0 flex-1 items-center gap-3 p-1 text-left"
+                  type="button"
+                  onClick={() => onSelectChat(chat.id)}
+                >
+                  <Avatar>
+                    <AvatarFallback>
+                      {getInitials(chat.phoneNumber)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="min-w-0 truncate text-sm font-medium">
+                    {chat.phoneNumber}
+                  </span>
+                </button>
+                <Button
+                  aria-label={`Remove chat with ${chat.phoneNumber}`}
+                  size="icon-sm"
+                  variant="destructive"
+                  type="button"
+                  onClick={() => onRemoveChat(chat.id)}
+                >
+                  <Trash2 />
+                </Button>
+              </div>
             ))}
           </div>
         )}

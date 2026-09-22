@@ -4,7 +4,12 @@ import ActiveChat from './ActiveChat';
 import ChatSidebar from './ChatSidebar.tsx';
 import { toast } from '@/components/ui/toast';
 import { logout } from '@/store/slices/auth';
-import { addChat, addMessage, selectChat } from '@/store/slices/chats';
+import {
+  addChat,
+  addMessage,
+  removeChat,
+  selectChat,
+} from '@/store/slices/chats';
 import { selectChats, selectSelectedChatId } from '@/store/selectors/chats';
 import { selectCredentials } from '@/store/selectors/auth';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -71,6 +76,7 @@ function Chat() {
           chats={chats}
           onCreateChat={createChat}
           onLogout={() => dispatch(logout())}
+          onRemoveChat={(chatId) => dispatch(removeChat(chatId))}
           onSelectChat={(chatId) => dispatch(selectChat(chatId))}
         />
 
