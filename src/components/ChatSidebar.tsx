@@ -69,7 +69,9 @@ function ChatSidebar({
                 onClick={() => onSelectChat(chat.id)}
               >
                 <Avatar>
-                  <AvatarFallback>{getInitials(chat.phoneNumber)}</AvatarFallback>
+                  <AvatarFallback>
+                    {getInitials(chat.phoneNumber)}
+                  </AvatarFallback>
                 </Avatar>
                 <span className="min-w-0 truncate text-sm font-medium">
                   {chat.phoneNumber}

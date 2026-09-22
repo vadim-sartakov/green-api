@@ -19,7 +19,7 @@ function MessageComposer({ onSend }: MessageComposerProps) {
 
     onSend(text);
     setDraftMessage('');
-  }
+  };
 
   return (
     <form

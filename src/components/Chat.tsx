@@ -36,7 +36,7 @@ function Chat() {
     dispatch(addChat(newChat));
     dispatch(selectChat(newChat.id));
     setIsCreateDialogOpen(false);
-  }
+  };
 
   const sendMessage = async (text: string) => {
     if (!activeChatId || !activeChat || !credentials) return;
@@ -80,7 +80,7 @@ function Chat() {
         description: 'The request could not be completed.',
       });
     }
-  }
+  };
 
   return (
     <main className="flex min-h-screen bg-muted/30 p-0 sm:p-4">

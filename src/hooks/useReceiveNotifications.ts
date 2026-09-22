@@ -18,7 +18,7 @@ const maxReceiveRetries = 5;
 
 const normalizePhoneNumber = (phoneNumber: string | number) => {
   return String(phoneNumber).replace(/\D/g, '');
-}
+};
 
 export const useReceiveNotifications = (credentials: ReceiveCredentials) => {
   const dispatch = useAppDispatch();
@@ -106,8 +106,7 @@ export const useReceiveNotifications = (credentials: ReceiveCredentials) => {
             toast.add({
               type: 'error',
               title: 'Message receiving stopped',
-              description:
-                'Could not receive messages after several attempts.',
+              description: 'Could not receive messages after several attempts.',
             });
             return;
           }
@@ -116,7 +115,7 @@ export const useReceiveNotifications = (credentials: ReceiveCredentials) => {
           await new Promise((resolve) => setTimeout(resolve, retryDelay));
         }
       }
-    }
+    };
 
     void receiveNotifications();
 
@@ -129,4 +128,4 @@ export const useReceiveNotifications = (credentials: ReceiveCredentials) => {
     dispatch,
     receiveNotificationRequest,
   ]);
-}
+};

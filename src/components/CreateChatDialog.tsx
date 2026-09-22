@@ -36,7 +36,7 @@ function CreateChatDialog({
 
   const createChat = ({ phoneNumber }: CreateChatFormValues) => {
     onCreate(phoneNumber.trim());
-  }
+  };
 
   return (
     <Dialog
@@ -51,10 +51,7 @@ function CreateChatDialog({
             Add a phone number to start a new conversation.
           </DialogDescription>
         </DialogHeader>
-        <form
-          id="create-chat-form"
-          onSubmit={handleSubmit(createChat)}
-        >
+        <form id="create-chat-form" onSubmit={handleSubmit(createChat)}>
           <Field data-invalid={!!errors.phoneNumber}>
             <FieldLabel htmlFor="phoneNumber">Phone number</FieldLabel>
             <Input
