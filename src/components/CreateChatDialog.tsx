@@ -52,22 +52,22 @@ function CreateChatDialog({
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create chat</DialogTitle>
+          <DialogTitle>Новый чат</DialogTitle>
           <DialogDescription>
-            Add a phone number to start a new conversation.
+            Добавьте номер телефона, чтобы начать новый чат.
           </DialogDescription>
         </DialogHeader>
         <form id="create-chat-form" onSubmit={handleSubmit(createChat)}>
           <Field data-invalid={!!errors.phoneNumber}>
-            <FieldLabel htmlFor="phoneNumber">Phone number</FieldLabel>
+            <FieldLabel htmlFor="phoneNumber">Номер телефона</FieldLabel>
             <Controller
               control={control}
               name="phoneNumber"
               rules={{
-                required: 'Phone number is required',
+                required: 'Введите номер телефона',
                 validate: (value) =>
                   value.replace(/\D/g, '').length === 11 ||
-                  'Enter a complete phone number',
+                  'Введите полный номер телефона',
               }}
               render={({ field }) => (
                 <MaskedInput
@@ -89,7 +89,7 @@ function CreateChatDialog({
         </form>
         <DialogFooter>
           <Button form="create-chat-form" type="submit">
-            Create chat
+            Создать чат
           </Button>
         </DialogFooter>
       </DialogContent>

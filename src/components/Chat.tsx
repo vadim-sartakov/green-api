@@ -62,8 +62,8 @@ function Chat() {
     } catch {
       toast.add({
         type: 'error',
-        title: 'Request failed',
-        description: 'The request could not be completed.',
+        title: 'Ошибка запроса',
+        description: 'Не удалось выполнить запрос.',
       });
     }
   };
@@ -90,9 +90,9 @@ function Chat() {
           ) : (
             <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
               <MessageCircle className="mb-4 size-12 text-muted-foreground/60" />
-              <h2 className="text-lg font-semibold">Select a chat</h2>
+              <h2 className="text-lg font-semibold">Выберите чат</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                Choose a conversation or create a new one.
+                Выберите чат или создайте новый.
               </p>
             </div>
           )}

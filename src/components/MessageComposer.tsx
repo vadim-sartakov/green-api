@@ -28,12 +28,12 @@ function MessageComposer({ onSend }: MessageComposerProps) {
     >
       <Textarea
         className="min-h-10 resize-none"
-        placeholder="Write a message..."
+        placeholder="Введите сообщение..."
         rows={1}
         value={draftMessage}
         onChange={(event) => setDraftMessage(event.target.value)}
       />
-      <Button aria-label="Send message" size="icon" type="submit">
+      <Button aria-label="Отправить сообщение" size="icon" type="submit">
         <Send />
       </Button>
     </form>

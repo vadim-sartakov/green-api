@@ -105,8 +105,9 @@ export const useReceiveNotifications = (credentials: ReceiveCredentials) => {
           if (retryCount > maxReceiveRetries) {
             toast.add({
               type: 'error',
-              title: 'Message receiving stopped',
-              description: 'Could not receive messages after several attempts.',
+              title: 'Получение сообщений остановлено',
+              description:
+                'Не удалось получить сообщения после нескольких попыток.',
             });
             return;
           }

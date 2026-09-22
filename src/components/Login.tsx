@@ -42,21 +42,23 @@ function Login({ onLogin }: LoginProps) {
           <CardHeader>
             <CardTitle className="text-2xl">Green Api</CardTitle>
             <CardDescription className="text-sm leading-6">
-              Enter your Green API credentials to continue.
+              Введите данные Green Api, чтобы продолжить.
             </CardDescription>
           </CardHeader>
 
           <CardContent>
             <FieldGroup>
               <Field data-invalid={!!errors.idInstance}>
-                <FieldLabel htmlFor="idInstance">idInstance</FieldLabel>
+                <FieldLabel htmlFor="idInstance">
+                  idInstance
+                </FieldLabel>
                 <Input
                   id="idInstance"
-                  placeholder="Enter your idInstance"
+                  placeholder="Введите idInstance"
                   type="text"
                   aria-invalid={!!errors.idInstance}
                   {...register('idInstance', {
-                    required: 'idInstance is required',
+                    required: 'idInstance обязателен',
                   })}
                 />
                 <FieldError errors={[errors.idInstance]} />
@@ -68,11 +70,11 @@ function Login({ onLogin }: LoginProps) {
                 </FieldLabel>
                 <Input
                   id="apiTokenInstance"
-                  placeholder="Enter your apiTokenInstance"
+                  placeholder="Введите apiTokenInstance"
                   type="text"
                   aria-invalid={!!errors.apiTokenInstance}
                   {...register('apiTokenInstance', {
-                    required: 'apiTokenInstance is required',
+                    required: 'apiTokenInstance обязателен',
                   })}
                 />
                 <FieldError errors={[errors.apiTokenInstance]} />
@@ -82,7 +84,7 @@ function Login({ onLogin }: LoginProps) {
 
           <CardFooter>
             <Button className="w-full" type="submit">
-              Continue
+              Продолжить
             </Button>
           </CardFooter>
         </Card>

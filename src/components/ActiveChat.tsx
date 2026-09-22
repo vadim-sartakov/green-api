@@ -20,14 +20,14 @@ function ActiveChat({ phoneNumber, messages, onSend }: ActiveChatProps) {
         </Avatar>
         <div>
           <h2 className="font-semibold">{phoneNumber}</h2>
-          <p className="text-xs text-muted-foreground">Green API chat</p>
+          <p className="text-xs text-muted-foreground">Чат Green Api</p>
         </div>
       </header>
 
       <ScrollArea className="flex-1 px-6 py-6">
         {messages.length === 0 ? (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            Send a message to start this conversation.
+            Отправьте сообщение, чтобы начать.
           </div>
         ) : (
           <div className="flex flex-col gap-3">

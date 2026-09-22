@@ -38,10 +38,10 @@ function ChatSidebar({
           <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
             Green Api
           </p>
-          <h1 className="text-xl font-semibold tracking-tight">Chats</h1>
+          <h1 className="text-xl font-semibold tracking-tight">Чаты</h1>
         </div>
         <Button
-          aria-label="Create chat"
+          aria-label="Создать чат"
           size="icon"
           type="button"
           onClick={() => setIsCreateDialogOpen(true)}
@@ -54,9 +54,9 @@ function ChatSidebar({
         {chats.length === 0 ? (
           <div className="flex flex-col items-center px-6 py-16 text-center">
             <MessageCircle className="mb-3 size-8 text-muted-foreground" />
-            <p className="font-medium">No chats yet</p>
+            <p className="font-medium">Пока нет чатов</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Create a chat to start messaging.
+              Создайте чат, чтобы начать.
             </p>
           </div>
         ) : (
@@ -85,7 +85,7 @@ function ChatSidebar({
                   </span>
                 </button>
                 <Button
-                  aria-label={`Remove chat with ${chat.phoneNumber}`}
+                  aria-label={`Удалить чат с номером ${chat.phoneNumber}`}
                   size="icon-sm"
                   variant="destructive"
                   type="button"
@@ -107,7 +107,7 @@ function ChatSidebar({
           onClick={onLogout}
         >
           <LogOut />
-          Log out
+          Выйти
         </Button>
       </div>
 
