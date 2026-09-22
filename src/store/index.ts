@@ -1,63 +1,55 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+  persistReducer,
+  persistStore,
+} from 'redux-persist';
+import storage from 'redux-persist/es/storage';
 
 import { api } from './api';
-import authReducer, { type AuthCredentials } from './slices/auth';
+import authReducer from './slices/auth';
+import chatsReducer from './slices/chats';
 
-const AUTH_STORAGE_KEY = 'green-api-auth';
-
-const loadCredentials = (): AuthCredentials | null => {
-  const storedCredentials = localStorage.getItem(AUTH_STORAGE_KEY);
-
-  if (!storedCredentials) {
-    return null;
-  }
-
-  try {
-    const credentials: unknown = JSON.parse(storedCredentials);
-
-    if (
-      typeof credentials === 'object' &&
-      credentials !== null &&
-      'idInstance' in credentials &&
-      'apiTokenInstance' in credentials &&
-      typeof credentials.idInstance === 'string' &&
-      typeof credentials.apiTokenInstance === 'string'
-    ) {
-      return credentials as AuthCredentials;
-    }
-  } catch {
-    localStorage.removeItem(AUTH_STORAGE_KEY);
-  }
-
-  return null;
-};
+const persistedAuthReducer = persistReducer(
+  {
+    key: 'auth',
+    storage,
+    whitelist: ['credentials'],
+  },
+  authReducer,
+);
+const persistedChatsReducer = persistReducer(
+  {
+    key: 'chats',
+    storage,
+    whitelist: ['chats', 'selectedChatId'],
+  },
+  chatsReducer,
+);
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
+    auth: persistedAuthReducer,
+    chats: persistedChatsReducer,
     [api.reducerPath]: api.reducer,
   },
-  preloadedState: {
-    auth: {
-      credentials: loadCredentials(),
-    },
-  },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
-});
-
-store.subscribe(() => {
-  const credentials = store.getState().auth.credentials;
-
-  if (credentials) {
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(credentials));
-  } else {
-    localStorage.removeItem(AUTH_STORAGE_KEY);
-  }
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(api.middleware),
 });
 
 setupListeners(store.dispatch);
+
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

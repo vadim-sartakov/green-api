@@ -1,13 +1,8 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import type { ChatMessage } from '@/store/slices/chats';
 import MessageComposer from './MessageComposer';
 import { getInitials } from '@/lib/utils';
-
-export type ChatMessage = {
-  id: string;
-  text: string;
-  direction: 'incoming' | 'outgoing';
-};
 
 type ActiveChatProps = {
   phoneNumber: string;

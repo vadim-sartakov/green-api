@@ -1,51 +1,46 @@
 import { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 
-import ActiveChat, { type ChatMessage } from './ActiveChat';
-import ChatSidebar, { type ChatSummary } from './ChatSidebar.tsx';
+import ActiveChat from './ActiveChat';
+import ChatSidebar from './ChatSidebar.tsx';
 import CreateChatDialog from '@/components/CreateChatDialog';
 import { logout } from '@/store/slices/auth';
-import { useAppDispatch } from '@/store/hooks';
-
-type ChatItem = ChatSummary & {
-  messages: ChatMessage[];
-};
+import { addChat, addMessage, selectChat } from '@/store/slices/chats';
+import { selectChats, selectSelectedChatId } from '@/store/selectors/chats';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 function Chat() {
   const dispatch = useAppDispatch();
-  const [chats, setChats] = useState<ChatItem[]>([]);
-  const [activeChatId, setActiveChatId] = useState<string | null>(null);
+  const chats = useAppSelector(selectChats);
+  const activeChatId = useAppSelector(selectSelectedChatId);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   const activeChat = chats.find((chat) => chat.id === activeChatId);
 
   function createChat(phoneNumber: string) {
-    const newChat: ChatItem = {
+    const newChat = {
       id: `${phoneNumber}-${Date.now()}`,
       phoneNumber,
       messages: [],
     };
 
-    setChats((currentChats) => [...currentChats, newChat]);
-    setActiveChatId(newChat.id);
+    dispatch(addChat(newChat));
+    dispatch(selectChat(newChat.id));
     setIsCreateDialogOpen(false);
   }
 
   function sendMessage(text: string) {
     if (!activeChatId) return;
 
-    setChats((currentChats) =>
-      currentChats.map((chat) =>
-        chat.id === activeChatId
-          ? {
-              ...chat,
-              messages: [
-                ...chat.messages,
-                { id: `${chat.id}-${Date.now()}`, text, direction: 'outgoing' },
-              ],
-            }
-          : chat,
-      ),
+    dispatch(
+      addMessage({
+        chatId: activeChatId,
+        message: {
+          id: `${activeChatId}-${Date.now()}`,
+          text,
+          direction: 'outgoing',
+        },
+      }),
     );
   }
 
@@ -57,7 +52,7 @@ function Chat() {
           chats={chats}
           onCreateChat={() => setIsCreateDialogOpen(true)}
           onLogout={() => dispatch(logout())}
-          onSelectChat={setActiveChatId}
+          onSelectChat={(chatId) => dispatch(selectChat(chatId))}
         />
 
         <section className="hidden min-w-0 flex-1 flex-col bg-muted/20 sm:flex">
