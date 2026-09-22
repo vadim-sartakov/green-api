@@ -20,8 +20,39 @@ export type SendMessageResponse = {
   idMessage: string;
 };
 
+export type ReceiveNotificationResponse = {
+  receiptId: number;
+  body: {
+    typeWebhook: string;
+    timestamp: number;
+    idMessage: string;
+    senderData: {
+      chatId: string;
+      senderPhoneNumber?: number;
+      senderName?: string;
+    };
+    messageData: {
+      typeMessage: string;
+      textMessageData?: {
+        textMessage: string;
+      };
+    };
+  };
+};
+
+export type DeleteNotificationResponse = {
+  result: boolean;
+  reason: string;
+};
+
 type CheckAccountArgs = AuthCredentials & CheckAccountRequest;
 type SendMessageArgs = AuthCredentials & SendMessageRequest;
+type ReceiveNotificationArgs = AuthCredentials & {
+  receiveTimeout: number;
+};
+type DeleteNotificationArgs = AuthCredentials & {
+  receiptId: number;
+};
 
 export const api = createApi({
   reducerPath: 'api',
@@ -43,7 +74,30 @@ export const api = createApi({
         body: { chatId, message },
       }),
     }),
+    receiveNotification: builder.mutation<
+      ReceiveNotificationResponse | null,
+      ReceiveNotificationArgs
+    >({
+      query: ({ idInstance, apiTokenInstance, receiveTimeout }) => ({
+        url: `waInstance${idInstance}/receiveNotification/${apiTokenInstance}`,
+        params: { receiveTimeout },
+      }),
+    }),
+    deleteNotification: builder.mutation<
+      DeleteNotificationResponse,
+      DeleteNotificationArgs
+    >({
+      query: ({ idInstance, apiTokenInstance, receiptId }) => ({
+        url: `waInstance${idInstance}/deleteNotification/${apiTokenInstance}/${receiptId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const { useCheckAccountMutation, useSendMessageMutation } = api;
+export const {
+  useCheckAccountMutation,
+  useSendMessageMutation,
+  useReceiveNotificationMutation,
+  useDeleteNotificationMutation,
+} = api;

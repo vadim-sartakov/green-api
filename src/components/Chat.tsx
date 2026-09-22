@@ -10,10 +10,8 @@ import { addChat, addMessage, selectChat } from '@/store/slices/chats';
 import { selectChats, selectSelectedChatId } from '@/store/selectors/chats';
 import { selectCredentials } from '@/store/selectors/auth';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import {
-  useCheckAccountMutation,
-  useSendMessageMutation,
-} from '@/store/api';
+import { useCheckAccountMutation, useSendMessageMutation } from '@/store/api';
+import { useReceiveNotifications } from '@/hooks/useReceiveNotifications';
 
 function Chat() {
   const dispatch = useAppDispatch();
@@ -23,6 +21,8 @@ function Chat() {
   const [checkAccountRequest] = useCheckAccountMutation();
   const [sendMessageRequest] = useSendMessageMutation();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+
+  useReceiveNotifications(credentials);
 
   const activeChat = chats.find((chat) => chat.id === activeChatId);
 
