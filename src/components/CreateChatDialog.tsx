@@ -34,7 +34,7 @@ function CreateChatDialog({
     formState: { errors },
   } = useForm<CreateChatFormValues>();
 
-  function createChat({ phoneNumber }: CreateChatFormValues) {
+  const createChat = ({ phoneNumber }: CreateChatFormValues) => {
     onCreate(phoneNumber.trim());
   }
 

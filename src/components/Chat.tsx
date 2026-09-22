@@ -26,7 +26,7 @@ function Chat() {
 
   const activeChat = chats.find((chat) => chat.id === activeChatId);
 
-  function createChat(phoneNumber: string) {
+  const createChat = (phoneNumber: string) => {
     const newChat = {
       id: `${phoneNumber}-${Date.now()}`,
       phoneNumber,
@@ -38,7 +38,7 @@ function Chat() {
     setIsCreateDialogOpen(false);
   }
 
-  async function sendMessage(text: string) {
+  const sendMessage = async (text: string) => {
     if (!activeChatId || !activeChat || !credentials) return;
 
     try {

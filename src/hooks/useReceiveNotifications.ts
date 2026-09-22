@@ -16,11 +16,11 @@ type ReceiveCredentials = {
 
 const maxReceiveRetries = 5;
 
-function normalizePhoneNumber(phoneNumber: string | number) {
+const normalizePhoneNumber = (phoneNumber: string | number) => {
   return String(phoneNumber).replace(/\D/g, '');
 }
 
-export function useReceiveNotifications(credentials: ReceiveCredentials) {
+export const useReceiveNotifications = (credentials: ReceiveCredentials) => {
   const dispatch = useAppDispatch();
   const chats = useAppSelector(selectChats);
   const [deleteNotificationRequest] = useDeleteNotificationMutation();
@@ -42,7 +42,7 @@ export function useReceiveNotifications(credentials: ReceiveCredentials) {
     let cancelled = false;
     let retryCount = 0;
 
-    async function receiveNotifications() {
+    const receiveNotifications = async () => {
       while (!cancelled) {
         try {
           const notification = await receiveNotificationRequest({
