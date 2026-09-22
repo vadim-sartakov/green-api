@@ -4,15 +4,24 @@ import { MessageCircle } from 'lucide-react';
 import ActiveChat from './ActiveChat';
 import ChatSidebar from './ChatSidebar.tsx';
 import CreateChatDialog from '@/components/CreateChatDialog';
+import { toast } from '@/components/ui/toast';
 import { logout } from '@/store/slices/auth';
 import { addChat, addMessage, selectChat } from '@/store/slices/chats';
 import { selectChats, selectSelectedChatId } from '@/store/selectors/chats';
+import { selectCredentials } from '@/store/selectors/auth';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import {
+  useCheckAccountMutation,
+  useSendMessageMutation,
+} from '@/store/api';
 
 function Chat() {
   const dispatch = useAppDispatch();
   const chats = useAppSelector(selectChats);
   const activeChatId = useAppSelector(selectSelectedChatId);
+  const credentials = useAppSelector(selectCredentials);
+  const [checkAccountRequest] = useCheckAccountMutation();
+  const [sendMessageRequest] = useSendMessageMutation();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   const activeChat = chats.find((chat) => chat.id === activeChatId);
@@ -29,19 +38,48 @@ function Chat() {
     setIsCreateDialogOpen(false);
   }
 
-  function sendMessage(text: string) {
-    if (!activeChatId) return;
+  async function sendMessage(text: string) {
+    if (!activeChatId || !activeChat || !credentials) return;
 
-    dispatch(
-      addMessage({
-        chatId: activeChatId,
-        message: {
-          id: `${activeChatId}-${Date.now()}`,
-          text,
-          direction: 'outgoing',
-        },
-      }),
-    );
+    try {
+      dispatch(
+        addMessage({
+          chatId: activeChatId,
+          message: {
+            id: `${activeChatId}-${Date.now()}`,
+            text,
+            direction: 'outgoing',
+          },
+        }),
+      );
+
+      const phoneNumber = Number(activeChat.phoneNumber.replace(/\D/g, ''));
+      const account = await checkAccountRequest({
+        ...credentials,
+        phoneNumber,
+      }).unwrap();
+
+      if (!account.exist) {
+        toast.add({
+          type: 'error',
+          title: 'Account not found',
+          description: 'This phone number is not a WhatsApp account.',
+        });
+        return;
+      }
+
+      await sendMessageRequest({
+        ...credentials,
+        chatId: account.chatId,
+        message: text,
+      }).unwrap();
+    } catch {
+      toast.add({
+        type: 'error',
+        title: 'Request failed',
+        description: 'The request could not be completed.',
+      });
+    }
   }
 
   return (
