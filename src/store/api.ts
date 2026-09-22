@@ -47,6 +47,10 @@ export type DeleteNotificationResponse = {
 
 type CheckAccountArgs = AuthCredentials & CheckAccountRequest;
 type SendMessageArgs = AuthCredentials & SendMessageRequest;
+type SendChatMessageArgs = AuthCredentials & {
+  phoneNumber: number;
+  message: string;
+};
 type ReceiveNotificationArgs = AuthCredentials & {
   receiveTimeout: number;
 };
@@ -74,6 +78,45 @@ export const api = createApi({
         body: { chatId, message },
       }),
     }),
+    sendChatMessage: builder.mutation<SendMessageResponse, SendChatMessageArgs>(
+      {
+        queryFn: async (
+          { idInstance, apiTokenInstance, phoneNumber, message },
+          _api,
+          _extraOptions,
+          baseQuery,
+        ) => {
+          const accountResult = await baseQuery({
+            url: `waInstance${idInstance}/checkAccount/${apiTokenInstance}`,
+            method: 'POST',
+            body: { phoneNumber },
+          });
+
+          if (accountResult.error) return { error: accountResult.error };
+
+          const account = accountResult.data as CheckAccountResponse;
+
+          if (!account.exist) {
+            return {
+              error: {
+                status: 'CUSTOM_ERROR',
+                error: 'ACCOUNT_NOT_FOUND',
+              },
+            };
+          }
+
+          const sendResult = await baseQuery({
+            url: `waInstance${idInstance}/sendMessage/${apiTokenInstance}`,
+            method: 'POST',
+            body: { chatId: account.chatId, message },
+          });
+
+          if (sendResult.error) return { error: sendResult.error };
+
+          return { data: sendResult.data as SendMessageResponse };
+        },
+      },
+    ),
     receiveNotification: builder.mutation<
       ReceiveNotificationResponse | null,
       ReceiveNotificationArgs
@@ -98,6 +141,7 @@ export const api = createApi({
 export const {
   useCheckAccountMutation,
   useSendMessageMutation,
+  useSendChatMessageMutation,
   useReceiveNotificationMutation,
   useDeleteNotificationMutation,
 } = api;

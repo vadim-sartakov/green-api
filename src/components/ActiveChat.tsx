@@ -1,8 +1,9 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { ChatMessage } from '@/store/slices/chats';
-import MessageComposer from './MessageComposer';
 import { getInitials } from '@/lib/utils';
+import MessageComposer from './MessageComposer';
+import Message from './Message';
 
 type ActiveChatProps = {
   phoneNumber: string;
@@ -31,16 +32,7 @@ function ActiveChat({ phoneNumber, messages, onSend }: ActiveChatProps) {
         ) : (
           <div className="flex flex-col gap-3">
             {messages.map((message) => (
-              <div
-                className={`max-w-[75%] rounded-xl px-4 py-2 text-sm ${
-                  message.direction === 'outgoing'
-                    ? 'self-end bg-primary text-primary-foreground'
-                    : 'bg-background'
-                }`}
-                key={message.id}
-              >
-                {message.text}
-              </div>
+              <Message key={message.id} message={message} />
             ))}
           </div>
         )}

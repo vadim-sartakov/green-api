@@ -1,16 +1,14 @@
-import { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 
 import ActiveChat from './ActiveChat';
 import ChatSidebar from './ChatSidebar.tsx';
-import CreateChatDialog from '@/components/CreateChatDialog';
 import { toast } from '@/components/ui/toast';
 import { logout } from '@/store/slices/auth';
 import { addChat, addMessage, selectChat } from '@/store/slices/chats';
 import { selectChats, selectSelectedChatId } from '@/store/selectors/chats';
 import { selectCredentials } from '@/store/selectors/auth';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { useCheckAccountMutation, useSendMessageMutation } from '@/store/api';
+import { useSendChatMessageMutation } from '@/store/api';
 import { useReceiveNotifications } from '@/hooks/useReceiveNotifications';
 
 function Chat() {
@@ -18,9 +16,7 @@ function Chat() {
   const chats = useAppSelector(selectChats);
   const activeChatId = useAppSelector(selectSelectedChatId);
   const credentials = useAppSelector(selectCredentials);
-  const [checkAccountRequest] = useCheckAccountMutation();
-  const [sendMessageRequest] = useSendMessageMutation();
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [sendChatMessageRequest] = useSendChatMessageMutation();
 
   useReceiveNotifications(credentials);
 
@@ -35,7 +31,6 @@ function Chat() {
 
     dispatch(addChat(newChat));
     dispatch(selectChat(newChat.id));
-    setIsCreateDialogOpen(false);
   };
 
   const sendMessage = async (text: string) => {
@@ -54,23 +49,9 @@ function Chat() {
       );
 
       const phoneNumber = Number(activeChat.phoneNumber.replace(/\D/g, ''));
-      const account = await checkAccountRequest({
+      await sendChatMessageRequest({
         ...credentials,
         phoneNumber,
-      }).unwrap();
-
-      if (!account.exist) {
-        toast.add({
-          type: 'error',
-          title: 'Account not found',
-          description: 'This phone number is not a WhatsApp account.',
-        });
-        return;
-      }
-
-      await sendMessageRequest({
-        ...credentials,
-        chatId: account.chatId,
         message: text,
       }).unwrap();
     } catch {
@@ -88,7 +69,7 @@ function Chat() {
         <ChatSidebar
           activeChatId={activeChatId}
           chats={chats}
-          onCreateChat={() => setIsCreateDialogOpen(true)}
+          onCreateChat={createChat}
           onLogout={() => dispatch(logout())}
           onSelectChat={(chatId) => dispatch(selectChat(chatId))}
         />
@@ -111,12 +92,6 @@ function Chat() {
           )}
         </section>
       </section>
-
-      <CreateChatDialog
-        open={isCreateDialogOpen}
-        onOpenChange={setIsCreateDialogOpen}
-        onCreate={createChat}
-      />
     </main>
   );
 }

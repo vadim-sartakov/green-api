@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { LogOut, MessageCircle, Plus } from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import { getInitials } from '@/lib/utils';
+import CreateChatDialog from './CreateChatDialog';
 
 export type ChatSummary = {
   id: string;
@@ -15,7 +16,7 @@ type ChatSidebarProps = {
   chats: ChatSummary[];
   activeChatId: string | null;
   onSelectChat: (chatId: string) => void;
-  onCreateChat: () => void;
+  onCreateChat: (phoneNumber: string) => void;
   onLogout: () => void;
 };
 
@@ -26,6 +27,8 @@ function ChatSidebar({
   onCreateChat,
   onLogout,
 }: ChatSidebarProps) {
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+
   return (
     <aside className="flex w-full max-w-sm shrink-0 flex-col border-r bg-card">
       <header className="flex items-center justify-between px-4 py-4">
@@ -39,7 +42,7 @@ function ChatSidebar({
           aria-label="Create chat"
           size="icon"
           type="button"
-          onClick={onCreateChat}
+          onClick={() => setIsCreateDialogOpen(true)}
         >
           <Plus />
         </Button>
@@ -92,6 +95,15 @@ function ChatSidebar({
           Log out
         </Button>
       </div>
+
+      <CreateChatDialog
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+        onCreate={(phoneNumber) => {
+          onCreateChat(phoneNumber);
+          setIsCreateDialogOpen(false);
+        }}
+      />
     </aside>
   );
 }
