@@ -3,7 +3,6 @@ import Login from '@/components/Login';
 import { selectLoggedIn } from '@/store/selectors/auth';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { login } from '@/store/slices/auth';
-import './App.css';
 
 function App() {
   const dispatch = useAppDispatch();
