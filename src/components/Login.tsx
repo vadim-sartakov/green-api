@@ -7,40 +7,37 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import type { AuthCredentials } from '@/store/slices/auth';
+import { useForm } from 'react-hook-form';
 
 type LoginProps = {
   onLogin: (credentials: AuthCredentials) => void;
 };
 
 function Login({ onLogin }: LoginProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AuthCredentials>();
+
+  const submitLogin = (credentials: AuthCredentials) => {
+    onLogin({
+      idInstance: credentials.idInstance.trim(),
+      apiTokenInstance: credentials.apiTokenInstance.trim(),
+    });
+  };
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-8">
-      <form
-        className="w-full max-w-sm"
-        onSubmit={(event) => {
-          event.preventDefault();
-          const formData = new FormData(event.currentTarget);
-          const idInstanceValue = formData.get('idInstance');
-          const apiTokenInstanceValue = formData.get('apiTokenInstance');
-
-          if (
-            typeof idInstanceValue !== 'string' ||
-            typeof apiTokenInstanceValue !== 'string'
-          ) {
-            return;
-          }
-
-          const idInstance = idInstanceValue.trim();
-          const apiTokenInstance = apiTokenInstanceValue.trim();
-
-          if (idInstance && apiTokenInstance) {
-            onLogin({ idInstance, apiTokenInstance });
-          }
-        }}
-      >
+      <form className="w-full max-w-sm" onSubmit={handleSubmit(submitLogin)}>
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl">Green Api</CardTitle>
@@ -51,26 +48,34 @@ function Login({ onLogin }: LoginProps) {
 
           <CardContent>
             <FieldGroup>
-              <Field>
+              <Field data-invalid={!!errors.idInstance}>
                 <FieldLabel htmlFor="idInstance">idInstance</FieldLabel>
                 <Input
                   id="idInstance"
-                  name="idInstance"
                   placeholder="Enter your idInstance"
                   type="text"
+                  aria-invalid={!!errors.idInstance}
+                  {...register('idInstance', {
+                    required: 'idInstance is required',
+                  })}
                 />
+                <FieldError errors={[errors.idInstance]} />
               </Field>
 
-              <Field>
+              <Field data-invalid={!!errors.apiTokenInstance}>
                 <FieldLabel htmlFor="apiTokenInstance">
                   apiTokenInstance
                 </FieldLabel>
                 <Input
                   id="apiTokenInstance"
-                  name="apiTokenInstance"
                   placeholder="Enter your apiTokenInstance"
                   type="text"
+                  aria-invalid={!!errors.apiTokenInstance}
+                  {...register('apiTokenInstance', {
+                    required: 'apiTokenInstance is required',
+                  })}
                 />
+                <FieldError errors={[errors.apiTokenInstance]} />
               </Field>
             </FieldGroup>
           </CardContent>

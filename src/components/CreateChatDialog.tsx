@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Field, FieldLabel } from '@/components/ui/field';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 type CreateChatDialogProps = {
@@ -18,24 +18,32 @@ type CreateChatDialogProps = {
   onCreate: (phoneNumber: string) => void;
 };
 
+type CreateChatFormValues = {
+  phoneNumber: string;
+};
+
 function CreateChatDialog({
   open,
   onOpenChange,
   onCreate,
 }: CreateChatDialogProps) {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CreateChatFormValues>();
 
-  function createChat(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const normalizedPhoneNumber = phoneNumber.trim();
-    if (!normalizedPhoneNumber) return;
-
-    onCreate(normalizedPhoneNumber);
+  function createChat({ phoneNumber }: CreateChatFormValues) {
+    onCreate(phoneNumber.trim());
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} onOpenChangeComplete={() => setPhoneNumber('')}>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      onOpenChangeComplete={() => reset()}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create chat</DialogTitle>
@@ -43,18 +51,24 @@ function CreateChatDialog({
             Add a phone number to start a new conversation.
           </DialogDescription>
         </DialogHeader>
-        <form id="create-chat-form" onSubmit={createChat}>
-          <Field>
+        <form
+          id="create-chat-form"
+          onSubmit={handleSubmit(createChat)}
+        >
+          <Field data-invalid={!!errors.phoneNumber}>
             <FieldLabel htmlFor="phoneNumber">Phone number</FieldLabel>
             <Input
               autoFocus
               id="phoneNumber"
-              name="phoneNumber"
               placeholder="+1 555 123 4567"
               type="tel"
-              value={phoneNumber}
-              onChange={(event) => setPhoneNumber(event.target.value)}
+              aria-invalid={!!errors.phoneNumber}
+              {...register('phoneNumber', {
+                validate: (value) =>
+                  value.trim().length > 0 || 'Phone number is required',
+              })}
             />
+            <FieldError errors={[errors.phoneNumber]} />
           </Field>
         </form>
         <DialogFooter>
