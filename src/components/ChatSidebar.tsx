@@ -44,7 +44,6 @@ function ChatSidebar({
           <Plus />
         </Button>
       </header>
-      <Separator />
 
       <ScrollArea className="flex-1">
         {chats.length === 0 ? (
@@ -81,7 +80,7 @@ function ChatSidebar({
           </div>
         )}
       </ScrollArea>
-      <Separator />
+
       <div className="p-3">
         <Button
           className="w-full justify-start"

@@ -11,7 +11,7 @@ type MessageComposerProps = {
 function MessageComposer({ onSend }: MessageComposerProps) {
   const [draftMessage, setDraftMessage] = useState('');
 
-  const submitMessage = (event: React.FormEvent<HTMLFormElement>) => {
+  const submitMessage = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const text = draftMessage.trim();

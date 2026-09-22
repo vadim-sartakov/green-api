@@ -83,8 +83,8 @@ function Chat() {
   };
 
   return (
-    <main className="flex min-h-screen bg-muted/30 p-0 sm:p-4">
-      <section className="flex min-h-screen w-full overflow-hidden border bg-background sm:min-h-0 sm:h-[calc(100vh-2rem)] sm:rounded-xl">
+    <main className="flex min-h-screen">
+      <section className="flex min-h-screen w-full overflow-hidden">
         <ChatSidebar
           activeChatId={activeChatId}
           chats={chats}
