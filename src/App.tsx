@@ -1,13 +1,19 @@
-import { useState } from 'react';
-
 import Chat from '@/components/Chat';
 import Login from '@/components/Login';
+import { selectLoggedIn } from '@/store/selectors/auth';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { login } from '@/store/slices/auth';
 import './App.css';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const dispatch = useAppDispatch();
+  const loggedIn = useAppSelector(selectLoggedIn);
 
-  return loggedIn ? <Chat /> : <Login onLogin={() => setLoggedIn(true)} />;
+  return loggedIn ? (
+    <Chat />
+  ) : (
+    <Login onLogin={(credentials) => dispatch(login(credentials))} />
+  );
 }
 
 export default App;

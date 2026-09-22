@@ -9,9 +9,10 @@ import {
 } from '@/components/ui/card';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import type { AuthCredentials } from '@/store/slices/auth';
 
 type LoginProps = {
-  onLogin: () => void;
+  onLogin: (credentials: AuthCredentials) => void;
 };
 
 function Login({ onLogin }: LoginProps) {
@@ -21,7 +22,23 @@ function Login({ onLogin }: LoginProps) {
         className="w-full max-w-sm"
         onSubmit={(event) => {
           event.preventDefault();
-          onLogin();
+          const formData = new FormData(event.currentTarget);
+          const idInstanceValue = formData.get('idInstance');
+          const apiTokenInstanceValue = formData.get('apiTokenInstance');
+
+          if (
+            typeof idInstanceValue !== 'string' ||
+            typeof apiTokenInstanceValue !== 'string'
+          ) {
+            return;
+          }
+
+          const idInstance = idInstanceValue.trim();
+          const apiTokenInstance = apiTokenInstanceValue.trim();
+
+          if (idInstance && apiTokenInstance) {
+            onLogin({ idInstance, apiTokenInstance });
+          }
         }}
       >
         <Card>
