@@ -61,7 +61,7 @@ type DeleteNotificationArgs = AuthCredentials & {
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_BASE_URL ?? '',
+    baseUrl: import.meta.env.VITE_API_BASE_URL ?? 'https://api.green-api.com',
   }),
   endpoints: (builder) => ({
     checkAccount: builder.mutation<CheckAccountResponse, CheckAccountArgs>({
