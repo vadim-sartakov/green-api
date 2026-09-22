@@ -1,12 +1,12 @@
-import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+
+import Login from '@/components/Login';
 import './App.css';
 
 function App() {
-  return (
-    <div>
-      <Button>Test button</Button>
-    </div>
-  );
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  return loggedIn ? null : <Login onLogin={() => setLoggedIn(true)} />;
 }
 
 export default App;
