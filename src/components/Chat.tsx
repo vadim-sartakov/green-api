@@ -4,12 +4,15 @@ import { MessageCircle } from 'lucide-react';
 import ActiveChat, { type ChatMessage } from './ActiveChat';
 import ChatSidebar, { type ChatSummary } from './ChatSidebar.tsx';
 import CreateChatDialog from '@/components/CreateChatDialog';
+import { logout } from '@/store/slices/auth';
+import { useAppDispatch } from '@/store/hooks';
 
 type ChatItem = ChatSummary & {
   messages: ChatMessage[];
 };
 
 function Chat() {
+  const dispatch = useAppDispatch();
   const [chats, setChats] = useState<ChatItem[]>([]);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -53,6 +56,7 @@ function Chat() {
           activeChatId={activeChatId}
           chats={chats}
           onCreateChat={() => setIsCreateDialogOpen(true)}
+          onLogout={() => dispatch(logout())}
           onSelectChat={setActiveChatId}
         />
 

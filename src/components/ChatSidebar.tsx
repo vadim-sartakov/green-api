@@ -1,4 +1,4 @@
-import { MessageCircle, Plus } from 'lucide-react';
+import { LogOut, MessageCircle, Plus } from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ type ChatSidebarProps = {
   activeChatId: string | null;
   onSelectChat: (chatId: string) => void;
   onCreateChat: () => void;
+  onLogout: () => void;
 };
 
 function ChatSidebar({
@@ -23,6 +24,7 @@ function ChatSidebar({
   activeChatId,
   onSelectChat,
   onCreateChat,
+  onLogout,
 }: ChatSidebarProps) {
   return (
     <aside className="flex w-full max-w-sm shrink-0 flex-col border-r bg-card">
@@ -77,6 +79,18 @@ function ChatSidebar({
           </div>
         )}
       </ScrollArea>
+      <Separator />
+      <div className="p-3">
+        <Button
+          className="w-full justify-start"
+          variant="ghost"
+          type="button"
+          onClick={onLogout}
+        >
+          <LogOut />
+          Log out
+        </Button>
+      </div>
     </aside>
   );
 }
