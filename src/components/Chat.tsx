@@ -72,6 +72,7 @@ function Chat() {
     <main className="flex min-h-screen">
       <section className="flex min-h-screen w-full overflow-hidden">
         <ChatSidebar
+          className={activeChat ? 'hidden sm:flex' : undefined}
           activeChatId={activeChatId}
           chats={chats}
           onCreateChat={createChat}
@@ -80,11 +81,14 @@ function Chat() {
           onSelectChat={(chatId) => dispatch(selectChat(chatId))}
         />
 
-        <section className="hidden min-w-0 flex-1 flex-col bg-muted/20 sm:flex">
+        <section
+          className={`${activeChat ? 'flex' : 'hidden sm:flex'} min-w-0 flex-1 flex-col bg-muted/20`}
+        >
           {activeChat ? (
             <ActiveChat
               messages={activeChat.messages}
               phoneNumber={activeChat.phoneNumber}
+              onBack={() => dispatch(selectChat(null))}
               onSend={sendMessage}
             />
           ) : (

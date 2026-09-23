@@ -13,6 +13,7 @@ export type ChatSummary = {
 };
 
 type ChatSidebarProps = {
+  className?: string;
   chats: ChatSummary[];
   activeChatId: string | null;
   onSelectChat: (chatId: string) => void;
@@ -22,6 +23,7 @@ type ChatSidebarProps = {
 };
 
 function ChatSidebar({
+  className,
   chats,
   activeChatId,
   onSelectChat,
@@ -32,7 +34,9 @@ function ChatSidebar({
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   return (
-    <aside className="flex w-full max-w-sm shrink-0 flex-col border-r bg-card">
+    <aside
+      className={`${className ?? ''} flex w-full max-w-sm shrink-0 flex-col border-r bg-card`}
+    >
       <header className="flex items-center justify-between px-4 py-4">
         <div>
           <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">

@@ -1,20 +1,33 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
 import type { ChatMessage } from '@/store/slices/chats';
 import { getInitials } from '@/lib/utils';
+import { ArrowLeft } from 'lucide-react';
 import MessageComposer from './MessageComposer';
 import Message from './Message';
 
 type ActiveChatProps = {
   phoneNumber: string;
   messages: ChatMessage[];
+  onBack: () => void;
   onSend: (text: string) => void;
 };
 
-function ActiveChat({ phoneNumber, messages, onSend }: ActiveChatProps) {
+function ActiveChat({ phoneNumber, messages, onBack, onSend }: ActiveChatProps) {
   return (
     <>
       <header className="flex items-center gap-3 border-b bg-background px-6 py-4">
+        <Button
+          aria-label="Вернуться к чатам"
+          className="sm:hidden"
+          size="icon"
+          type="button"
+          variant="ghost"
+          onClick={onBack}
+        >
+          <ArrowLeft />
+        </Button>
         <Avatar>
           <AvatarFallback>{getInitials(phoneNumber)}</AvatarFallback>
         </Avatar>
