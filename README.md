@@ -1,8 +1,10 @@
 # Green API Demo Chat
 
-[Открыть демо](https://example.com/green-api-demo)
+[Открыть демо](https://vadim-sartakov.github.io/green-api/)
 
 Демонстрационное чат-приложение на базе Green API. Пользователь вводит данные инстанса, создает чат по номеру телефона, отправляет сообщения и получает входящие сообщения через long polling.
+
+![](./images/screen.png)
 
 ## Стек
 
