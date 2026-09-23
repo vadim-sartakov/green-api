@@ -1,32 +1,38 @@
-# React + TypeScript + Vite
+# Green API Demo Chat
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+[Открыть демо](https://example.com/green-api-demo)
 
-Currently, two official plugins are available:
+Демонстрационное чат-приложение на базе Green API. Пользователь вводит данные инстанса, создает чат по номеру телефона, отправляет сообщения и получает входящие сообщения через long polling.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Стек
 
-## React Compiler
+- React 19 и TypeScript
+- Vite
+- Redux Toolkit и RTK Query
+- Tailwind CSS и shadcn, Base UI
+- React Hook Form и React IMask
+- Vitest и Testing Library
+- Oxlint и Oxfmt
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Рабочий процесс
 
-## Expanding the Oxlint configuration
+1. Пользователь вводит `idInstance` и `apiTokenInstance`.
+2. После входа можно создать чат по номеру телефона.
+3. При отправке сообщения приложение проверяет аккаунт через Green API, затем отправляет сообщение.
+4. Входящие уведомления постоянно запрашиваются через `receiveNotification`.
+5. Полученное текстовое сообщение добавляется в чат, после чего уведомление удаляется из очереди.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Скрипты
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm run dev               # локальный сервер разработки
+npm run build             # проверка типов и production-сборка
+npm run test              # unit и integration тесты
+npm run test:unit         # unit, API и hook тесты
+npm run test:integration  # интеграционный сценарий приложения
+npm run lint              # проверка Oxlint
+npm run fmt               # форматирование
+npm run fmt:check         # проверка форматирования
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Для другого адреса API можно задать переменную окружения `VITE_API_BASE_URL`.
