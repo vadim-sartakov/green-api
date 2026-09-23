@@ -1,6 +1,30 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { getInitials, normalizePhoneNumber } from './utils';
+import { getInitials, normalizePhoneNumber, retry } from './utils';
+
+describe('retry', () => {
+  it('returns the result after a failed attempt', async () => {
+    const fn = vi
+      .fn<() => Promise<string>>()
+      .mockRejectedValueOnce(new Error('temporary failure'))
+      .mockResolvedValue('success');
+
+    await expect(
+      retry(fn, { maxRetries: 1, retryDelay: 0 }),
+    ).resolves.toBe('success');
+    expect(fn).toHaveBeenCalledTimes(2);
+  });
+
+  it('throws the last error after retries are exhausted', async () => {
+    const error = new Error('failure');
+    const fn = vi.fn<() => Promise<never>>().mockRejectedValue(error);
+
+    await expect(retry(fn, { maxRetries: 2, retryDelay: 0 })).rejects.toBe(
+      error,
+    );
+    expect(fn).toHaveBeenCalledTimes(3);
+  });
+});
 
 describe('normalizePhoneNumber', () => {
   it('removes formatting characters from a phone number', () => {

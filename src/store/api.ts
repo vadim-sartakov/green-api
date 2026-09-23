@@ -20,10 +20,14 @@ export type SendMessageResponse = {
   idMessage: string;
 };
 
+export type WebhookType = 'incomingMessageReceived' | (string & {});
+
+export type MessageType = 'textMessage' | (string & {});
+
 export type ReceiveNotificationResponse = {
   receiptId: number;
   body: {
-    typeWebhook: string;
+    typeWebhook: WebhookType;
     timestamp: number;
     idMessage: string;
     senderData: {
@@ -32,7 +36,7 @@ export type ReceiveNotificationResponse = {
       senderName?: string;
     };
     messageData: {
-      typeMessage: string;
+      typeMessage: MessageType;
       textMessageData?: {
         textMessage: string;
       };
