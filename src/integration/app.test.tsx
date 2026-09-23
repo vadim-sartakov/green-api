@@ -91,7 +91,10 @@ describe('app integration', () => {
       </Provider>,
     );
 
-    await user.type(screen.getByLabelText('idInstance'), credentials.idInstance);
+    await user.type(
+      screen.getByLabelText('idInstance'),
+      credentials.idInstance,
+    );
     await user.type(
       screen.getByLabelText('apiTokenInstance'),
       credentials.apiTokenInstance,
@@ -103,9 +106,13 @@ describe('app integration', () => {
     await user.type(phoneInput, '79991234567');
     await user.click(screen.getByRole('button', { name: 'Создать чат' }));
 
-    const messageInput = await screen.findByPlaceholderText('Введите сообщение...');
+    const messageInput = await screen.findByPlaceholderText(
+      'Введите сообщение...',
+    );
     await user.type(messageInput, 'Hello from the app');
-    await user.click(screen.getByRole('button', { name: 'Отправить сообщение' }));
+    await user.click(
+      screen.getByRole('button', { name: 'Отправить сообщение' }),
+    );
 
     await waitFor(() => {
       expect(

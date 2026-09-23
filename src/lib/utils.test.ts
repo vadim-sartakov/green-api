@@ -9,9 +9,9 @@ describe('retry', () => {
       .mockRejectedValueOnce(new Error('temporary failure'))
       .mockResolvedValue('success');
 
-    await expect(
-      retry(fn, { maxRetries: 1, retryDelay: 0 }),
-    ).resolves.toBe('success');
+    await expect(retry(fn, { maxRetries: 1, retryDelay: 0 })).resolves.toBe(
+      'success',
+    );
     expect(fn).toHaveBeenCalledTimes(2);
   });
 

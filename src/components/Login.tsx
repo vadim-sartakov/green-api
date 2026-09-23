@@ -49,9 +49,7 @@ function Login({ onLogin }: LoginProps) {
           <CardContent>
             <FieldGroup>
               <Field data-invalid={!!errors.idInstance}>
-                <FieldLabel htmlFor="idInstance">
-                  idInstance
-                </FieldLabel>
+                <FieldLabel htmlFor="idInstance">idInstance</FieldLabel>
                 <Input
                   id="idInstance"
                   placeholder="Введите idInstance"

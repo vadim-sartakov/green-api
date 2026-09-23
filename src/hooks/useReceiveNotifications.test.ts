@@ -92,9 +92,7 @@ describe('useReceiveNotifications', () => {
   });
 
   it('does not receive notifications without complete credentials', () => {
-    renderHook(() =>
-      useReceiveNotifications({ idInstance: '123456' }),
-    );
+    renderHook(() => useReceiveNotifications({ idInstance: '123456' }));
 
     expect(mocks.receiveNotification).not.toHaveBeenCalled();
   });
