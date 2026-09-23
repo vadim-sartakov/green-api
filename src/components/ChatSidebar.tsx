@@ -46,11 +46,11 @@ function ChatSidebar({
         </div>
         <Button
           aria-label="Создать чат"
-          size="icon"
           type="button"
           onClick={() => setIsCreateDialogOpen(true)}
         >
           <Plus />
+          Создать чат
         </Button>
       </header>
 
