@@ -5,6 +5,7 @@ import {
   useReceiveNotificationMutation,
 } from '@/store/api';
 import { toast } from '@/components/ui/toast';
+import { normalizePhoneNumber } from '@/lib/utils';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addChat, addMessage } from '@/store/slices/chats';
 import { selectChats } from '@/store/selectors/chats';
@@ -15,10 +16,6 @@ type ReceiveCredentials = {
 } | null;
 
 const maxReceiveRetries = 5;
-
-const normalizePhoneNumber = (phoneNumber: string | number) => {
-  return String(phoneNumber).replace(/\D/g, '');
-};
 
 export const useReceiveNotifications = (credentials: ReceiveCredentials) => {
   const dispatch = useAppDispatch();
