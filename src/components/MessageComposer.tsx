@@ -32,6 +32,12 @@ function MessageComposer({ onSend }: MessageComposerProps) {
         rows={1}
         value={draftMessage}
         onChange={(event) => setDraftMessage(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            event.currentTarget.form?.requestSubmit();
+          }
+        }}
       />
       <Button aria-label="Отправить сообщение" size="icon" type="submit">
         <Send />
